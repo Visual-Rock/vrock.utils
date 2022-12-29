@@ -5,11 +5,11 @@ src = [
 ]
 
 utilslib = static_library(meson.project_name(), src,
-    include_directories: include_directories('../include')
+    include_directories: include_directories('include')
 )
 
 utilslib_dep = declare_dependency(
-    include_directories: include_directories('../include'),
+    include_directories: include_directories('include'),
     link_with: utilslib
 )
 set_variable(meson.project_name() + '_dep', utilslib_dep)
