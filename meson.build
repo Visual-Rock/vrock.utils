@@ -5,7 +5,7 @@ src = [
 ]
 
 header = [
-    'include/vrock/utils/ByteArray.hpp'
+    'include/vrock/utils/ByteArray.hpp',
     'include/vrock/utils/List.hpp'
 ]
 
