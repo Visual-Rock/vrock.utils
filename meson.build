@@ -36,6 +36,8 @@ pkg_mod.generate(
 ##### tests #####
 #################
 
+if get_option('tests')
+
 test_src = [
     'tests/List.test.cpp',
     'tests/ByteArray.test.cpp'
@@ -53,11 +55,16 @@ tests = executable(
 
 test('gtest tests', tests)
 
+endif
 ####################
 ##### examples #####
 ####################
+
+if get_option('examples')
 
 example_ByteArray = executable(
     'example_ByteArray', 'examples/example_ByteArray.cpp',
     dependencies: utilslib_dep
 )
+
+endif
