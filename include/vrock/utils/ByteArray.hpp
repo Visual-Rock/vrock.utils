@@ -23,8 +23,9 @@ namespace vrock::utils {
         std::string to_string();
 
         static std::shared_ptr<ByteArray> from_string(const std::string& str);
+        static std::shared_ptr<ByteArray> from_hex_string(const std::string& str);
     public:
         size_t length;
-        uint8_t* data;
+        uint8_t* data = nullptr;
     };
 }

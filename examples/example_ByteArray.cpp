@@ -16,6 +16,9 @@ int main()
     auto pba = std::make_shared<vrock::utils::ByteArray>(4);
     pba->data[0] = '1'; pba->data[1] = '2'; pba->data[2] = '3'; pba->data[3] = '4';
     std::cout << pba->to_string() << std::endl;
+
+    auto hex = vrock::utils::ByteArray::from_hex_string("31323334");
+    std::cout << hex->to_string() << std::endl;
     return 0;
 }
 

@@ -27,14 +27,14 @@ namespace vrock::utils {
 
     uint8_t ByteArray::get(size_t pos)
     {
-        if (pos > length)
+        if (pos > length - 1)
             throw std::out_of_range("out of bounds");
         return data[pos];
     }
 
     void ByteArray::set(size_t pos, uint8_t val)
     {
-        if (pos > length)
+        if (pos > length - 1)
             throw std::out_of_range("out of bounds");
         data[pos] = val;
     }
@@ -48,5 +48,16 @@ namespace vrock::utils {
     std::shared_ptr<ByteArray> ByteArray::from_string(const std::string& str)
     {
         return std::make_shared<ByteArray>(str);
+    }
+
+    std::shared_ptr<ByteArray> ByteArray::from_hex_string(const std::string &str)
+    {
+        std::string s = str + ((str.length() % 2 == 1) ? "0" : ""); // Append zero if needed
+        auto data = std::make_shared<ByteArray>(s.length() / 2);
+
+        for (int i = 0; i < data->length; ++i)
+            data->set(i, std::stoul(s.substr(i * 2, 2), nullptr, 16));
+
+        return data;
     }
 }

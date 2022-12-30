@@ -1,4 +1,4 @@
-project('vrockutils', 'cpp', version: '0.0.1')
+project('vrockutils', 'cpp', version: '0.0.2')
 
 src = [
     'src/ByteArray.cpp'
@@ -31,6 +31,27 @@ pkg_mod.generate(
   subdirs : meson.project_name(),
   libraries : utilslib,
 )
+
+#################
+##### tests #####
+#################
+
+test_src = [
+    'tests/List.test.cpp',
+    'tests/ByteArray.test.cpp'
+]
+
+gtest_proj = subproject('gtest')
+gtest_dep = gtest_proj.get_variable('gtest_main_dep')
+
+
+tests = executable(
+    'tests', test_src,
+    dependencies: [ gtest_dep, utilslib_dep ],
+    include_directories: include_directories('include')
+)
+
+test('gtest tests', tests)
 
 ####################
 ##### examples #####
