@@ -55,7 +55,7 @@ namespace vrock::utils {
         std::string s = str + ((str.length() % 2 == 1) ? "0" : ""); // Append zero if needed
         auto data = std::make_shared<ByteArray>(s.length() / 2);
 
-        for (int i = 0; i < data->length; ++i)
+        for (size_t i = 0; i < data->length; ++i)
             data->set(i, std::stoul(s.substr(i * 2, 2), nullptr, 16));
 
         return data;
