@@ -1,3 +1,5 @@
+if get_option('docs')
+
 doxygen = find_program('doxygen', required : false)
 apidoc = find_program('breathe-apidoc', required : false)
 sphinx_build = find_program('sphinx-build', required : false)
@@ -21,7 +23,7 @@ if doxygen.found()
             depends: [ doxygen_xml ]
         )
 
-        if apidoc.found()
+        if sphinx_build.found()
             custom_target('docs',
                 output: '.',
                 command: [ sphinx_build, '-b', 'html', meson.source_root() + '/docs/', meson.source_root() + '/docs/html'],
@@ -37,4 +39,5 @@ if doxygen.found()
     endif  
 else
     warning('docs can not be build without doxygen')
+endif
 endif

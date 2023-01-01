@@ -6,6 +6,23 @@
 Welcome to vrock.utils's documentation!
 =======================================
 
+The vrock.utils module is a collection of common data structures used thru out the vrock Libs ecosystem. It contains useful data types
+like the ByteArray or a List with Linq features.  
+
+.. toctree::
+   :glob:
+   :maxdepth: 2
+   :caption: General:
+
+   pages/install
+
+.. toctree::
+   :glob:
+   :maxdepth: 2
+   :caption: Classes:
+
+   pages/bytearray
+
 .. toctree::
    :glob:
    :maxdepth: 2

@@ -13,6 +13,7 @@
 
 namespace vrock::utils {
 
+    /*! \cond */
     template <typename R> constexpr auto less( const R &a, const R &b ) -> bool
     {
         if constexpr ( std::is_floating_point<R>::value )
@@ -28,26 +29,37 @@ namespace vrock::utils {
         }
         return a < b;
     }
+    /*! \endcond */
 
+    /// List that adds Linq functionality
+    ///
+    /// this class adds Linq features like aggregate, select and group_by functions.
     template<class T>
     class List : public std::vector<T>
     {
     public:
+        /// Empty list
         List() {}
+        /// @param v List Elements
         List( std::vector<T> v ) : std::vector<T>( v ) {}
 
         ~List() {}
     public:
+        /// @return size of the list
         auto inline count() -> size_t
         { 
             return this->size();
         }
-
+        /// applies an expression on the list
+        /// @param exp an expression that is used for the for loop
         auto inline for_each(std::function<void(T)> exp) -> void
         {
             std::for_each(this->begin(), this->end(), exp);
         }
 
+        /// applies an aggregate function on the List 
+        /// @param exp aggregate function to use. it takes the element and the value of the runs befor. returns the new value 
+        /// @return result after the aggregate function was run on every element        
         template<class R>
         auto inline aggregate(std::function<R (T, R)> exp ) -> R
         {
@@ -57,49 +69,62 @@ namespace vrock::utils {
             });
             return ret;
         }
+        /// sets the given list with the value of the current list
+        /// @param l list to copy to
+        /// @return the current list  
         auto inline let( List<T>* l) -> List<T>
         {
             l->resize( this->size( ) );
             std::copy( this->begin( ), this->end( ), l->begin( ) );
             return *this;
         }
-
+        /// checks if a given value is contained in the List
+        /// @param val value to check
+        /// @return value in this List
         auto inline contains( T val) -> bool
         {
             return any( [ val ]( T it ) { return it == val; } );
         }
+        /// checks if the List contains any element
         auto inline any() -> bool
         {
             return !this->empty();
         }
+        /// checks if the List contains any specific element
+        /// @param exp expression to check for the wanted element
         auto inline any( std::function<bool(T)> exp) -> bool
         {
             return std::find_if( this->begin( ), this->end( ), exp ) !=
                 this->end( );
         }
+        /// checks if all elements in the List conform to an expression
+        /// @param exp expresion to check against
         auto inline all( std::function<bool(T)> exp) -> bool
         {
             if (std::find_if_not(this->begin(), this->end(), exp) == this->end())
                 return true;
             return false;
         }
+        /// check if the given List and the current List are equal
         auto inline sequence_equal( List<T> o) -> bool
         {
             return *this == o;
         }
-
+        /// concatenates two lists together and returns the result
         auto inline concat( List<T> o ) -> List<T>
         {
             this->insert(this->end(), o.begin(), o.end());
             return *this;
         }
-
+        /// skips elements in the list and return the remaining
+        /// @param a amount to skip
         auto inline skip( size_t a ) -> List<T>
         {
             if ( a > this->size( ) )
                 return List<T>( );
             return List<T>( std::vector<T>( this->begin( ) + a, this->end( ) ) );
         }
+        /// skip elements till the expression evaluates to false
         auto inline skip_while( std::function<bool(T)> exp ) -> List<T>
         {
             auto it = std::find_if_not(this->begin(), this->end(), exp);
@@ -107,12 +132,15 @@ namespace vrock::utils {
                 return List<T>( );
             return List<T>( std::vector<T>( it, this->end() ) );
         }
+        /// @param a amount of elements to take
+        /// @return List with the first a elements from this List
         auto inline take( size_t a ) -> List<T>
         {
             if ( a > this->size( ) )
                 return List<T>( std::vector<T>( this->begin( ), this->end( ) ) );
             return List<T>( std::vector<T>( this->begin( ), this->begin( ) + a ) );
         }
+        /// takes elements till the expression evaluates to false
         auto inline take_while( std::function<bool(T)> exp) -> List<T>
         {
             auto it = std::find_if_not(this->begin(), this->end(), exp);
@@ -120,12 +148,15 @@ namespace vrock::utils {
                 return List<T>( std::vector<T>( this->begin( ), this->end( ) ) );
             return List<T>( std::vector<T>( this->begin(), it ) );
         }
+        /// revers the order of elements
         auto inline revers ( ) -> List<T>
         {
             std::reverse(this->begin(), this->end());
             return *this;
         }
-
+        /// Get the first element conforming to an expression. if no element conforms throw an exception 
+        /// @param exp expression to check against
+        /// @return first element that complies with the expression 
         auto inline first( std::function<bool(T)> exp ) -> T
         {
             auto res = std::find_if(this->begin(), this->end(), exp);
@@ -133,6 +164,9 @@ namespace vrock::utils {
                 throw std::runtime_error("No element matching predicate found");
             return *res;
         }
+        /// Get the first element conforming to an expression. if no element conforms return a default value 
+        /// @param exp expression to check against
+        /// @return first element that complies with the expression 
         auto inline first_or_default( std::function<bool(T)> exp, T _default = T() ) -> T
         {
             auto res = std::find_if(this->begin(), this->end(), exp);
@@ -140,6 +174,9 @@ namespace vrock::utils {
                 return _default;
             return *res;
         }
+        /// Get the last element conforming to an expression. if no element conforms throw an exception 
+        /// @param exp expression to check against
+        /// @return last element that complies with the expression 
         auto inline last( std::function<bool(T)> exp ) -> T
         {
             auto res = std::find_if(this->rbegin(), this->rend(), exp);
@@ -147,6 +184,9 @@ namespace vrock::utils {
                 throw std::runtime_error("No element matching predicate found");
             return *res;
         }
+        /// Get the last element conforming to an expression. if no element conforms return a default value 
+        /// @param exp expression to check against
+        /// @return last element that complies with the expression 
         auto inline last_or_default( std::function<bool(T)> exp, T _default = T() ) -> T
         {
             auto res = std::find_if(this->rbegin(), this->rend(), exp);
@@ -154,7 +194,9 @@ namespace vrock::utils {
                 return _default;
             return *res;
         }
-
+        /// get a single element conforming to an expression. if multiple conform it throws an exception
+        /// @param exp expression to check against
+        /// @return the element conforming to exp
         auto inline single(std::function<bool(T)> exp) -> T
         {
             auto res1 = std::find_if(this->begin(), this->end(), exp);
@@ -165,6 +207,9 @@ namespace vrock::utils {
                 throw std::runtime_error("more than one element matching the predicate found");
             return *res1;
         }
+        /// get a single element conforming to an expression. if multiple conform it throws an exception and if no element was found return the default
+        /// @param exp expression to check against
+        /// @return the element conforming to exp
         auto inline single_or_default(std::function<bool(T)> exp, T _default = T() ) -> T
         {
             auto res1 = std::find_if(this->begin(), this->end(), exp);
@@ -175,7 +220,10 @@ namespace vrock::utils {
                 throw std::runtime_error("more than one element matching the predicate found");
             return *res1;
         }
-
+        /// @brief selects all elements and applies the given expression
+        /// @tparam R type of the newly created list 
+        /// @param exp expression which takes an element of type T and return an element of type R 
+        /// @return List with all elements
         template<class R> 
         auto inline select( std::function<R(T)> exp ) -> List<R>
         {
@@ -184,6 +232,9 @@ namespace vrock::utils {
                         [ & ]( T i ) { ret.push_back( exp( i ) ); } );
             return ret;
         }
+        /// @brief apply a filter (exp) to the list
+        /// @param exp expression to decide if an element should be in the resulting list
+        /// @return list with all elements complying to the expression  
         auto inline where(std::function<bool(T)> exp) -> List<T>
         {
             auto ret = List<T>( );
@@ -195,7 +246,13 @@ namespace vrock::utils {
                         } );
             return ret;
         }
-
+        /// @brief Joins the current list on o
+        /// @tparam R type of the List o
+        /// @tparam E type of the resulting List
+        /// @param o List to join on 
+        /// @param exp1 expression to that returns if two elements should be joined
+        /// @param exp2 expression that returns a new joined element 
+        /// @return resulting joined List
         template<class R, class E>
         auto inline join(List<R> o, std::function<bool(T, R)> exp1, std::function<E(T, R)> exp2) -> List<E>
         {
@@ -209,6 +266,10 @@ namespace vrock::utils {
             return ret;
         }
 
+        /// @brief groups the list by the given parameters
+        /// @tparam ...R types of the parameters to group by
+        /// @param ...params the parameter to group by
+        /// @return resulting grouped map
         template <typename... R> 
         auto inline group_by( R... params )
         {
@@ -235,13 +296,15 @@ namespace vrock::utils {
             }
             return res;
         }
-
+        /// @brief orders the List by a given predicate
+        /// @param exp expression to order by
+        /// @return ordered List
         auto inline order_by( std::function<bool(T,T)> exp ) -> List<T>
         {
             std::sort(this->begin(), this->end(), exp);
             return *this;
         }
-
+        /// @return List containing distinct elements 
         auto inline distinct() -> List<T>
         {
             auto ret = List<T>( );
@@ -253,10 +316,16 @@ namespace vrock::utils {
                         } );
             return ret;
         }
+        /// @brief applies a union on the current and the given list
+        /// @param other List to perform the union on
+        /// @return resulting union list
         auto inline union_list(List<T> other) -> List<T>
         {
             return this->concat(other).distinct();
         }
+        /// @brief returns all elements contained in both Lists
+        /// @param other List to intersect with
+        /// @return resulting intersection
         auto inline intersect(List<T> other) -> List<T>
         {
             auto ret = List<T>( );
@@ -266,6 +335,9 @@ namespace vrock::utils {
             });
             return ret;
         }
+        /// @brief returns a List filled with all entries that are not in the given list
+        /// @param other list of elements to exclude
+        /// @return filtered list
         auto inline except(List<T> other) -> List<T>
         {
             auto ret = List<T>( );
@@ -276,27 +348,37 @@ namespace vrock::utils {
             return ret;
         }
     
+        /// @brief converts the current List to a std::vector
+        /// @return list as vector
         auto inline to_vector() -> std::vector<T>
         {
             return std::vector<T>(this->begin(), this->end());
         }
+        /// @brief converts the current List to a std::deque
+        /// @return list as deque
         auto inline to_deque() -> std::deque<T>
         {
             return std::deque<T>(this->begin(), this->end());
         }
+        /// @brief converts the current List to a std::forward_list
+        /// @return list as forward_list
         auto inline to_forward_list() -> std::forward_list<T>
         {
             return std::forward_list<T>(this->begin(), this->end());
         }
+        /// @brief converts the current List to a std::list
+        /// @return list as std::list
         auto inline to_list() -> std::list<T>
         {
             return std::list<T>(this->begin(), this->end());
         }
     private:
+        /*! \cond */
         template <class M> struct remove_pointers
         {
             typedef M type;
         };
+
         template <typename M, typename N> struct remove_pointers<N M::*>
         {
             typedef N type;
@@ -330,8 +412,13 @@ namespace vrock::utils {
             return tuple_less_t<0u, s,
                                 typename remove_pointers<R>::type...>::tuple_less;
         }
+        /*! \endcond */
     };
 
+    /// @brief flattens the given list
+    /// @tparam T type of the List Lists
+    /// @param list collection of lists to flatten
+    /// @return flattened List
     template<class T>
     auto select_many(List<List<T>> const &list) -> List<T>
     {
@@ -340,7 +427,11 @@ namespace vrock::utils {
             flattened.insert(flattened.end(), l.begin(), l.end());
         return flattened;
     }
-
+    
+    /// @brief flattens the given list
+    /// @tparam T type of the List Lists
+    /// @param list collection of lists to flatten
+    /// @return flattened List
     template<class T>
     auto select_many(List<std::vector<T>> const &list) -> List<T>
     {

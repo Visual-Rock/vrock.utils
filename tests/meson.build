@@ -1,3 +1,5 @@
+if get_option('tests')
+
 test_src = [
     'List.test.cpp',
     'ByteArray.test.cpp'
@@ -14,3 +16,5 @@ tests = executable(
 )
 
 test('gtest tests', tests)
+
+endif
