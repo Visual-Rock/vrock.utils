@@ -19,7 +19,7 @@ utilslib_dep = declare_dependency(
 )
 set_variable(meson.project_name() + '_dep', utilslib_dep)
 
-install_headers(header, subdir: meson.project_name())
+install_headers(header, subdir: 'vrock/utils')
 
 pkg_mod = import('pkgconfig')
 pkg_mod.generate(
