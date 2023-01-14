@@ -59,8 +59,10 @@ TEST(ByteArraySetGet, BasicAssertion) {
 
 TEST(ByteArrayToString, BasicAssertion) {
     ByteArray arr("12345");
+    auto hex = ByteArray::from_hex_string("31323334");
 
     EXPECT_EQ(arr.to_string(), "12345");
+    EXPECT_EQ(hex->to_hex_string(), "31323334");
 }
 
 TEST(ByteArrayFromString, BasicAssertion) {

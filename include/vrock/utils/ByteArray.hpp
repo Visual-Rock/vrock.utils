@@ -28,6 +28,9 @@ namespace vrock::utils
         /// allocates memory for len bytes
         void reserve(size_t len);
 
+        /// appends the given ByteArray to this ByteArrays data
+        void append(std::shared_ptr<ByteArray> data);
+
         /// @param pos position of the byte
         /// @return byte at the given position
         uint8_t get(size_t pos);
@@ -38,6 +41,9 @@ namespace vrock::utils
 
         /// converts the binary data to an std::string
         std::string to_string();
+
+        /// converts the binary data to an std::string in hex format
+        std::string to_hex_string();
         
         /// @param str string that should be converted to binary data
         /// @return shared pointer to the binary data of the given string 
@@ -50,5 +56,8 @@ namespace vrock::utils
         size_t length;
         /// pointer to the first element of the stored data
         uint8_t* data = nullptr;
+
+        uint8_t& operator[] (size_t i);
+        const uint8_t& operator[] (size_t i) const;
     };
 }
