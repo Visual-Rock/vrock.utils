@@ -14,7 +14,7 @@ like the ByteArray or a List with Linq features.
    :maxdepth: 2
    :caption: General:
 
-   pages/install
+   pages/howtouse
 
 .. toctree::
    :glob:

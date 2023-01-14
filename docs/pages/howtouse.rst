@@ -1,4 +1,4 @@
-Install
+How to use
 =======================================
 
 vrock libs use the meson build system so integrating it into your meson project is fairly easy.
