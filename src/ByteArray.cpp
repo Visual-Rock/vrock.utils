@@ -2,6 +2,7 @@
 
 #include <stdexcept>
 #include <cstring>
+#include <sstream>
 #include <iomanip>
 
 namespace vrock::utils {
