@@ -25,6 +25,7 @@ namespace vrock::utils {
     {
         length = len;
         data = (uint8_t*)malloc(sizeof(uint8_t) * len);
+        memset(data, 0, len);
     }
 
     void ByteArray::append(std::shared_ptr<ByteArray> data)
