@@ -4,6 +4,7 @@
 #include <cstring>
 #include <sstream>
 #include <iomanip>
+#include <algorithm>
 
 namespace vrock::utils {
 
@@ -36,6 +37,17 @@ namespace vrock::utils {
         free(this->data);
         length = length + data->length;
         this->data = n;
+    }
+
+    std::shared_ptr<ByteArray> ByteArray::subarr(size_t start, size_t len)
+    {
+        if (len == -1UL)
+            len = length - start;
+        if (start + len > length)
+            throw std::out_of_range("failed to create sub array! bytearray not long enough.");
+        auto subarr = std::make_shared<ByteArray>(len);
+        memcpy(subarr->data, data + start, len);
+        return subarr;
     }
 
     uint8_t ByteArray::get(size_t pos)

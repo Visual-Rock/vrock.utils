@@ -31,6 +31,12 @@ namespace vrock::utils
         /// appends the given ByteArray to this ByteArrays data
         void append(std::shared_ptr<ByteArray> data);
 
+        /// @brief creats a sub array based on this array
+        /// @param start start position
+        /// @param len length of the created subarray. defaults to the length - start
+        /// @return subarray
+        std::shared_ptr<ByteArray> subarr(size_t start, size_t len = -1);
+
         /// @param pos position of the byte
         /// @return byte at the given position
         uint8_t get(size_t pos);
@@ -53,7 +59,7 @@ namespace vrock::utils
         static std::shared_ptr<ByteArray> from_hex_string(const std::string& str);
     public:
         /// length of the stored data 
-        size_t length;
+        size_t length = 0;
         /// pointer to the first element of the stored data
         uint8_t* data = nullptr;
 
