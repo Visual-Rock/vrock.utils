@@ -36,16 +36,16 @@ namespace vrock::utils
     auto ByteArray::reserve( size_t len ) -> void
     {
         length = len;
-        data = (uint8_t *)malloc( sizeof( uint8_t ) * len );
-        memset( data, 0, len );
+        data = (uint8_t *)std::malloc( sizeof( uint8_t ) * len );
+        std::memset( data, 0, len );
     }
 
     auto ByteArray::append( const std::shared_ptr<ByteArray> &data ) -> void
     {
-        auto *n = (uint8_t *)malloc( sizeof( uint8_t ) * ( length + data->length ) );
+        auto *n = (uint8_t *)std::malloc( sizeof( uint8_t ) * ( length + data->length ) );
         std::memcpy( n, this->data, length );
         std::memcpy( n + length, data->data, length );
-        free( this->data );
+        std::free( this->data );
         length = length + data->length;
         this->data = n;
     }
@@ -57,7 +57,7 @@ namespace vrock::utils
         if ( start + len > length )
             throw std::out_of_range( "failed to create sub array! byte array not long enough." );
         auto subarr = std::make_shared<ByteArray>( len );
-        memcpy( subarr->data, data + start, len );
+        std::memcpy( subarr->data, data + start, len );
         return subarr;
     }
 

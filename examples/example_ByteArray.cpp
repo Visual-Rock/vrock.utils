@@ -22,7 +22,8 @@ int main( )
 
     auto hex = vrock::utils::ByteArray::from_hex_string( "31323334" );
     std::cout << hex->to_string( ) << std::endl;
-
+    ba->append(pba);
+    std::cout << ba->to_string() << std::endl;
     std::cout << hex->subarr( 2, 2 )->to_string( ) << std::endl;
     return 0;
 }
