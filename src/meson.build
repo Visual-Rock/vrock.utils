@@ -9,7 +9,13 @@ header = [
 
 public_header = include_directories('../include')
 
-utilslib = static_library(meson.project_name(), src,
+lib_type = get_option('default_library')
+if lib_type == 'shared' and sys.OS() == 'Windows'
+    add_global_arguments('-DVROCKUTILS_SHARED=1', language: 'cpp')
+    add_project_arguments('-DVROCKUTILS_EXPORT=1', language: 'cpp')
+endif
+
+utilslib = library(meson.project_name(), src,
     include_directories: public_header
 )
 

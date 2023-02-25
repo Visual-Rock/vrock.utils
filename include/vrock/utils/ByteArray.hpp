@@ -6,6 +6,8 @@
 #include <memory>
 #include <string>
 
+#include "vrockutils_conf.h"
+
 namespace vrock::utils
 {
     /// Utility class for storing unsigned 8 bit integers.
@@ -13,7 +15,7 @@ namespace vrock::utils
     /// This class allows the user to store bytes.
     /// It has utility functions that allow to create binary data from hex strings or normal strings as well as
     /// converting the binary data stored to a string.
-    class ByteArray
+    class VROCKUTILS_API ByteArray
     {
     public:
         /// initializes the data with a length of zero

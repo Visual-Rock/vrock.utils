@@ -5,6 +5,7 @@
 #include <forward_list>
 #include <list>
 #include <vector>
+#include <algorithm>
 
 #include <cmath>
 #include <functional>
