@@ -10,7 +10,7 @@ header = [
 public_header = include_directories('../include')
 
 lib_type = get_option('default_library')
-if lib_type == 'shared' and sys.OS() == 'Windows'
+if lib_type == 'shared' and build_machine.system() == 'windows'
     add_global_arguments('-DVROCKUTILS_SHARED=1', language: 'cpp')
     add_project_arguments('-DVROCKUTILS_EXPORT=1', language: 'cpp')
 endif
